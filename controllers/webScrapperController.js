@@ -34,7 +34,6 @@ module.exports = (app) => {
       };
 
       $("article").each((i, element) => { // Use Cheerio to Search for all Article HTML Tags
-        //NPR Only Returns Low Res Images to the Web Scrapper. A little String Manipulation is Done to Get High Res Images
         let lowResImageLink = $(element).children('.item-image').children('.imagewrap').children('a').children('img').attr('src');
 
         if (lowResImageLink) {

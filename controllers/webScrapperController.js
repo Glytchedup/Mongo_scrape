@@ -4,11 +4,16 @@ let cheerio = require('cheerio'); // Web Scrapper
 let mongoose = require('mongoose'); // MongoDB ORM
 let db = require("../models"); // Require all models
 
+
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+mongoose.Promise = Promise;
+mongoose.connect('mongodb://heroku_snfmwsxm:toad8888@ds123790.mlab.com:23790/heroku_snfmwsxm');
 /////////////////////////////////////////////// /* Mongoose Configuration */ ////////////////////////////////////////////////////////
-mongoose.Promise = Promise; // Set mongoose to leverage Built in JavaScript ES6 Promises
-mongoose.connect("mongodb://heroku_n498q09l:nqhsgor6hvbhfudh35mk0npfo0@ds147267.mlab.com:47267/heroku_n498q09l", { // Connect to the Mongo DB
-  useMongoClient: true
-});
+// mongoose.Promise = Promise; // Set mongoose to leverage Built in JavaScript ES6 Promises
+// mongoose.connect("mongodb://heroku_n498q09l:nqhsgor6hvbhfudh35mk0npfo0@ds147267.mlab.com:47267/heroku_n498q09l", { // Connect to the Mongo DB
+//   useMongoClient: true
+// });
 
 // mongodb://heroku_n498q09l:nqhsgor6hvbhfudh35mk0npfo0@ds147267.mlab.com:47267/heroku_n498q09l
 
@@ -16,27 +21,21 @@ let mongooseConnection = mongoose.connection;
 
 mongooseConnection.on('error', console.error.bind(console, 'connection error:'));
 mongooseConnection.once('open', function() {
-  console.log(`Sucessfully Connected to Mongo DB !`); // If Connection is successful, Console.log(Message)
+  console.log(`Sucessfully Connected to Mongo DB !`);
 });
 
-/////////////////////////////////////////////// /* Exports */ ////////////////////////////////////////////////////////
-module.exports = (app) => { // Export Module Containing Routes. Called from Server.js
+module.exports = (app) => { 
 
-  /////////////////////////////////////////////// /* Get Requests */ ////////////////////////////////////////////////////////
-  // Default Route
   app.get("/", (req, res) => res.render("index"));
 
-  // Scrape Articles Route
   app.get("/api/search", (req, res) => {
 
     axios.get("https://www.npr.org/sections/news/").then(response => {
-      // console.log("Load Response");
-      // Then, we load that into cheerio and save it to $ for a shorthand selector
       let $ = cheerio.load(response.data);
 
       let handlebarsObject = {
         data: []
-      }; // Initialize Empty Object to Store Cheerio Objects
+      };
 
       $("article").each((i, element) => { // Use Cheerio to Search for all Article HTML Tags
         //NPR Only Returns Low Res Images to the Web Scrapper. A little String Manipulation is Done to Get High Res Images

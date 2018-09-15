@@ -3,11 +3,11 @@ h4{
 }
 
 .hover{
-    background-color: #F44336
+    background-color: green
 }
 
 .hoverRed:hover{
-  color: red;
+  color: purple;
 }
 
 .hover:hover{

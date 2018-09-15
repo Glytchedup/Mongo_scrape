@@ -8,20 +8,15 @@ let db = require("../models"); // Require all models
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
 mongoose.Promise = Promise;
-mongoose.connect('mongodb://heroku_snfmwsxm:toad8888@ds123790.mlab.com:23790/heroku_snfmwsxm');
-/////////////////////////////////////////////// /* Mongoose Configuration */ ////////////////////////////////////////////////////////
-// mongoose.Promise = Promise; // Set mongoose to leverage Built in JavaScript ES6 Promises
-// mongoose.connect("mongodb://heroku_n498q09l:nqhsgor6hvbhfudh35mk0npfo0@ds147267.mlab.com:47267/heroku_n498q09l", { // Connect to the Mongo DB
-//   useMongoClient: true
-// });
-
-// mongodb://heroku_n498q09l:nqhsgor6hvbhfudh35mk0npfo0@ds147267.mlab.com:47267/heroku_n498q09l
+mongoose.connect('mongodb://@ds123790.mlab.com:23790/heroku_snfmwsxm', {
+  // useMongoClient: true
+});
 
 let mongooseConnection = mongoose.connection;
 
 mongooseConnection.on('error', console.error.bind(console, 'connection error:'));
 mongooseConnection.once('open', function() {
-  console.log(`Sucessfully Connected to Mongo DB !`);
+  console.log(`Sucessfully Connected to MDB !`);
 });
 
 module.exports = (app) => { 
@@ -31,6 +26,7 @@ module.exports = (app) => {
   app.get("/api/search", (req, res) => {
 
     axios.get("https://www.npr.org/sections/news/").then(response => {
+    // axios.get("https://www.news.google.com").then(response => {
       let $ = cheerio.load(response.data);
 
       let handlebarsObject = {
